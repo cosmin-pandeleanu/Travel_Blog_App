@@ -1,2 +1,2 @@
-# Travel_Blog_App
-Android applicatiob made in Adnroid Studio with Kotlin
+# Travel Blog App
+### Android application made in Android Studio with Kotlin.
