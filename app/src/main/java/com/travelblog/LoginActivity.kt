@@ -1,6 +1,8 @@
 package com.travelblog
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -12,10 +14,18 @@ import com.travelblog.databinding.ActivityLoginBinding
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
+    private val preferences: BlogPreferences by lazy {
+        BlogPreferences(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (preferences.isLoggedIn()){
+            startMainActivity()
+            finish()
+            return
+        }
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -51,10 +61,19 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun performLogin() {
+        preferences.setLoggedIn(true)
         binding.textUsernameLayout.isEnabled = false
         binding.textPasswordInput.isEnabled = false
         binding.loginButton.visibility = View.INVISIBLE
         binding.progressBar.visibility = View.VISIBLE
+        Handler().postDelayed({
+            startMainActivity()
+            finish()
+        }, 2000)
+    }
+    private fun startMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
     private fun createTextWatcher(textInput: TextInputLayout): TextWatcher {
         return object : TextWatcher {
